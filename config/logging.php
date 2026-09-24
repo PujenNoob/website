@@ -96,13 +96,11 @@ return [
 
         'stderr' => [
             'driver' => 'monolog',
+            'handler' => StreamHandler::class,
             'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => \Monolog\Handler\StreamHandler::class,
             'with' => [
                 'stream' => 'php://stderr',
             ],
-            'formatter' => env('LOG_STDERR_FORMATTER'),
-            'processors' => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [
