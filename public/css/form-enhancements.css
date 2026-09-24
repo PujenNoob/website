@@ -1,0 +1,390 @@
+/**
+ * Form Enhancement Styles
+ * Provides visual feedback and animations for form interactions
+ */
+
+/* ===========================================
+   FORM LOADING STATES
+   =========================================== */
+
+.form-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.form-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 1001;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ===========================================
+   FIELD FOCUS STATES
+   =========================================== */
+
+.form-group.focused {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+}
+
+.form-group.focused .form-control {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* ===========================================
+   VALIDATION STATES
+   =========================================== */
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================================
+   SHAKE ANIMATION
+   =========================================== */
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* ===========================================
+   BUTTON ENHANCEMENTS
+   =========================================== */
+
+.btn-hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===========================================
+   ALERT ENHANCEMENTS
+   =========================================== */
+
+.alert {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: slideInDown 0.3s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+    border-left: 4px solid #17a2b8;
+}
+
+/* ===========================================
+   CHARACTER COUNTER
+   =========================================== */
+
+.character-counter {
+    display: block;
+    text-align: right;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    transition: color 0.2s ease;
+}
+
+.character-counter.text-warning {
+    color: #ffc107 !important;
+    font-weight: 600;
+}
+
+/* ===========================================
+   FORM GROUP ENHANCEMENTS
+   =========================================== */
+
+.form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.form-group .input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    z-index: 2;
+    transition: color 0.2s ease;
+}
+
+.form-group.focused .input-icon {
+    color: #007bff;
+}
+
+.form-group .form-control {
+    padding-left: 40px;
+    transition: all 0.2s ease;
+}
+
+/* ===========================================
+   CONTACT FORM SPECIFIC STYLES
+   =========================================== */
+
+.contact__form .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.contact__form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.contact__form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* ===========================================
+   NEWSLETTER FORM STYLES
+   =========================================== */
+
+.footer__newslatter form {
+    position: relative;
+}
+
+.footer__newslatter input {
+    border: 2px solid #e9ecef;
+    border-radius: 25px;
+    padding: 12px 20px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.footer__newslatter input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.footer__newslatter button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.footer__newslatter button:hover {
+    background: #0056b3;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* ===========================================
+   AUTH FORM STYLES
+   =========================================== */
+
+.auth-card .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+}
+
+.auth-card .form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    outline: none;
+}
+
+.auth-card .btn {
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.auth-card .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===========================================
+   ADMIN FORM STYLES
+   =========================================== */
+
+.admin-form .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px 14px;
+    transition: all 0.2s ease;
+}
+
+.admin-form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.admin-form .btn {
+    border-radius: 6px;
+    padding: 10px 20px;
+    transition: all 0.2s ease;
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN
+   =========================================== */
+
+@media (max-width: 768px) {
+    .form-group.focused {
+        transform: none;
+    }
+    
+    .btn-hover {
+        transform: none;
+    }
+    
+    .contact__form .form-control {
+        padding: 10px 14px;
+    }
+    
+    .footer__newslatter input {
+        padding: 10px 16px;
+    }
+    
+    .footer__newslatter button {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* ===========================================
+   ACCESSIBILITY ENHANCEMENTS
+   =========================================== */
+
+.form-control:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .form-control {
+        border-width: 2px;
+    }
+    
+    .alert {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

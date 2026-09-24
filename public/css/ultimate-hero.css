@@ -1,0 +1,605 @@
+/* Ultimate Hero Section - Bug-Free & Perfect */
+
+/* Ultimate Hero Container */
+.ultimate-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, 
+        var(--gray-50) 0%, 
+        var(--primary-50) 25%, 
+        var(--secondary-50) 50%, 
+        var(--accent-50) 75%, 
+        var(--gray-50) 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+.ultimate-hero__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.ultimate-hero__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-20);
+    align-items: center;
+    min-height: 80vh;
+}
+
+/* Ultimate Hero Text */
+.ultimate-hero__text {
+    z-index: 3;
+    position: relative;
+}
+
+.ultimate-hero__badge {
+    display: inline-block;
+    margin-bottom: var(--space-6);
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.ultimate-hero__badge-text {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.ultimate-hero__badge-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.ultimate-hero__badge:hover .ultimate-hero__badge-text::before {
+    left: 100%;
+}
+
+.ultimate-hero__title {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: var(--space-6);
+    color: var(--gray-900);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    position: relative;
+}
+
+.ultimate-hero__title-line {
+    display: block;
+    position: relative;
+}
+
+.ultimate-hero__title-line--accent {
+    background: linear-gradient(135deg, var(--primary-600), var(--secondary-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+}
+
+.ultimate-hero__title-line--accent::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    border-radius: var(--radius-full);
+    animation: expandWidth 1s ease-out 1s both;
+}
+
+@keyframes expandWidth {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+.ultimate-hero__description {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: var(--gray-600);
+    margin-bottom: var(--space-10);
+    max-width: 600px;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.ultimate-hero__actions {
+    display: flex;
+    gap: var(--space-6);
+    margin-bottom: var(--space-16);
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.ultimate-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.ultimate-hero__btn--primary {
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    color: white;
+    box-shadow: var(--shadow-xl);
+    border: none;
+}
+
+.ultimate-hero__btn--primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.ultimate-hero__btn--primary:hover::before {
+    left: 100%;
+}
+
+.ultimate-hero__btn--primary:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: var(--shadow-2xl);
+    color: white;
+    text-decoration: none;
+}
+
+.ultimate-hero__btn--secondary {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--gray-700);
+    border: 2px solid var(--gray-200);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+}
+
+.ultimate-hero__btn--secondary:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--primary-300);
+    color: var(--primary-600);
+    text-decoration: none;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: var(--shadow-xl);
+}
+
+.ultimate-hero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+    animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+
+.ultimate-hero__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-6);
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius-3xl);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    border: 1px solid var(--glass-border);
+    transition: var(--transition-all);
+    position: relative;
+    overflow: hidden;
+}
+
+.ultimate-hero__stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: var(--radius-3xl);
+}
+
+.ultimate-hero__stat:hover::before {
+    opacity: 0.1;
+}
+
+.ultimate-hero__stat:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.ultimate-hero__stat-number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--primary-600);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+    position: relative;
+    z-index: 1;
+}
+
+.ultimate-hero__stat-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ultimate Hero Visual */
+.ultimate-hero__visual {
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.ultimate-hero__image-container {
+    position: relative;
+    width: 100%;
+    height: 700px;
+}
+
+.ultimate-hero__image {
+    position: absolute;
+    border-radius: var(--radius-3xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+    transition: var(--transition-slow);
+    background: white;
+    padding: var(--space-4);
+}
+
+.ultimate-hero__image--primary {
+    top: 0;
+    right: 0;
+    width: 75%;
+    height: 85%;
+    z-index: 3;
+    animation: float 6s ease-in-out infinite;
+}
+
+.ultimate-hero__image--secondary {
+    bottom: 0;
+    left: 0;
+    width: 65%;
+    height: 70%;
+    z-index: 2;
+    animation: float 6s ease-in-out infinite 3s;
+}
+
+.ultimate-hero__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-2xl);
+    transition: transform var(--transition-slow);
+}
+
+.ultimate-hero__image:hover img {
+    transform: scale(1.05);
+}
+
+/* Ultimate Floating Cards */
+.ultimate-hero__floating-card {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-3xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-xl);
+    z-index: 4;
+    animation: float 8s ease-in-out infinite;
+    transition: var(--transition-all);
+}
+
+.ultimate-hero__floating-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: var(--shadow-2xl);
+}
+
+.ultimate-hero__floating-card--1 {
+    top: 15%;
+    left: -15%;
+    animation-delay: 0s;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(217, 70, 239, 0.1));
+}
+
+.ultimate-hero__floating-card--2 {
+    bottom: 15%;
+    right: -15%;
+    animation-delay: 4s;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(14, 165, 233, 0.1));
+}
+
+.ultimate-hero__floating-card--3 {
+    top: 50%;
+    left: -20%;
+    animation-delay: 2s;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(34, 197, 94, 0.1));
+}
+
+.ultimate-hero__card-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    color: var(--gray-700);
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.ultimate-hero__card-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    box-shadow: var(--shadow-md);
+}
+
+.ultimate-hero__card-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.ultimate-hero__card-title {
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-1);
+}
+
+.ultimate-hero__card-subtitle {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Ultimate Background Effects */
+.ultimate-hero__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.ultimate-hero__gradient {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(14, 165, 233, 0.1) 0%, 
+        rgba(217, 70, 239, 0.1) 50%, 
+        rgba(34, 197, 94, 0.1) 100%);
+    border-radius: 50% 0 0 50%;
+    transform: translateX(50%);
+    animation: gradientFloat 20s ease-in-out infinite;
+}
+
+.ultimate-hero__pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(217, 70, 239, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+    opacity: 0.6;
+    animation: patternFloat 25s ease-in-out infinite;
+}
+
+.ultimate-hero__particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.ultimate-hero__particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--primary-400);
+    border-radius: 50%;
+    animation: particleFloat 15s linear infinite;
+}
+
+.ultimate-hero__particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+.ultimate-hero__particle:nth-child(2) { top: 40%; left: 20%; animation-delay: 2s; }
+.ultimate-hero__particle:nth-child(3) { top: 60%; left: 15%; animation-delay: 4s; }
+.ultimate-hero__particle:nth-child(4) { top: 80%; left: 25%; animation-delay: 6s; }
+.ultimate-hero__particle:nth-child(5) { top: 30%; left: 80%; animation-delay: 1s; }
+.ultimate-hero__particle:nth-child(6) { top: 50%; left: 85%; animation-delay: 3s; }
+.ultimate-hero__particle:nth-child(7) { top: 70%; left: 90%; animation-delay: 5s; }
+
+/* Ultimate Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes gradientFloat {
+    0%, 100% {
+        transform: translateX(50%) rotate(0deg);
+    }
+    50% {
+        transform: translateX(50%) rotate(180deg);
+    }
+}
+
+@keyframes patternFloat {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(180deg);
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ultimate Responsive Design */
+@media (max-width: 1024px) {
+    .ultimate-hero__content {
+        grid-template-columns: 1fr;
+        gap: var(--space-16);
+        text-align: center;
+    }
+    
+    .ultimate-hero__visual {
+        order: -1;
+    }
+    
+    .ultimate-hero__image-container {
+        height: 500px;
+    }
+    
+    .ultimate-hero__floating-card--1 {
+        left: 5%;
+    }
+    
+    .ultimate-hero__floating-card--2 {
+        right: 5%;
+    }
+    
+    .ultimate-hero__floating-card--3 {
+        left: 0%;
+    }
+    
+    .ultimate-hero__stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-4);
+    }
+}
+
+@media (max-width: 768px) {
+    .ultimate-hero {
+        min-height: 90vh;
+        padding: var(--space-8) 0;
+    }
+    
+    .ultimate-hero__container {
+        padding: 0 var(--space-4);
+    }
+    
+    .ultimate-hero__actions {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-4);
+    }
+    
+    .ultimate-hero__btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .ultimate-hero__stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .ultimate-hero__image-container {
+        height: 400px;
+    }
+    
+    .ultimate-hero__floating-card {
+        display: none;
+    }
+    
+    .ultimate-hero__particles {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .ultimate-hero__image-container {
+        height: 300px;
+    }
+    
+    .ultimate-hero__title {
+        font-size: 2.5rem;
+    }
+    
+    .ultimate-hero__description {
+        font-size: 1.125rem;
+    }
+}
