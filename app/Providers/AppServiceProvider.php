@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Vercel terminates TLS at the proxy; force https URL generation.
+        if (! $this->app->environment('local')) {
+            URL::forceScheme('https');
+        }
+
         View::composer('*', function ($view) {
             $cart = session('cart', []);
             $total = 0;
