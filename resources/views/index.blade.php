@@ -263,7 +263,7 @@
             </div>
             
             <div class="ultimate-products__grid">
-                @foreach($products as $index => $product)
+                @forelse($products as $index => $product)
                     @php
                         // Assign classes based on product index for variety
                         $productClass = $index < count($products) / 4 ? 'new-arrivals' : 
@@ -325,7 +325,16 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-12 text-center py-5" style="grid-column: 1 / -1;">
+                        <div class="empty-state py-4">
+                            <i class="fas fa-shopping-bag fa-3x text-muted mb-3" style="opacity: 0.5;"></i>
+                            <h4 class="text-muted">Featured Collection Coming Soon</h4>
+                            <p class="text-muted">We are preparing our latest luxury catalog. Check out the shop to explore all available styles!</p>
+                            <a href="{{ route('shop') }}" class="btn btn-outline-dark mt-2">Browse All Products</a>
+                        </div>
+                    </div>
+                @endforelse
             </div>
             
             <div class="ultimate-products__cta">

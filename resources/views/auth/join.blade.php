@@ -193,14 +193,6 @@
             pointer-events: none;
         }
         .fade-section.active {
-            opacity: 1;
-            position: relative;
-            z-index: 2;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-        /* Initial state for login form */
-        #loginForm {
             opacity: 1 !important;
             position: relative !important;
             z-index: 2 !important;
@@ -263,29 +255,36 @@
                         <div class="auth-title h2">Welcome to Male Fashion</div>
                         <div class="text-muted mb-2">Create your account or log in to continue</div>
                     </div>
+                    @php
+                        $startWithRegister = (isset($showRegister) && $showRegister) 
+                            || old('name') 
+                            || $errors->has('name') 
+                            || ($errors->has('email') && old('name'))
+                            || request()->routeIs('register*');
+                    @endphp
                     <div class="text-center mb-4">
                         <div class="btn-group" role="group" aria-label="Authentication tabs">
-                            <button id="showLogin" class="btn btn-outline-success me-2 active">Login</button>
-                            <button id="showRegister" class="btn btn-outline-primary">Register</button>
+                            <button id="showLogin" class="btn btn-outline-success me-2 {{ !$startWithRegister ? 'active' : '' }}">Login</button>
+                            <button id="showRegister" class="btn btn-outline-primary {{ $startWithRegister ? 'active' : '' }}">Register</button>
                         </div>
                     </div>
                     <div class="card auth-card position-relative overflow-hidden" style="min-height: 420px;">
                         <div id="formWrapper" class="position-relative">
-                            <div id="registerForm" class="form-section fade-section" style="display: none;">
+                            <div id="registerForm" class="form-section fade-section {{ $startWithRegister ? 'active' : '' }}" style="{{ $startWithRegister ? 'display: block;' : 'display: none;' }}">
                                 <form method="POST" action="/register" id="registerFormElement">
                                     <h3 class="mb-4 text-center text-success">Register</h3>
                                     @csrf
                                     <div class="mb-3 form-group">
                                         <div class="input-wrapper">
                                             <span class="input-icon"><i class="fa fa-user"></i></span>
-                                            <input type="text" name="name" class="form-control" placeholder="Name" required>
+                                            <input type="text" name="name" class="form-control" placeholder="Name" value="{{ old('name') }}" required>
                                         </div>
                                         @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="mb-3 form-group">
                                         <div class="input-wrapper">
                                             <span class="input-icon"><i class="fa fa-envelope"></i></span>
-                                            <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                            <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required>
                                         </div>
                                         @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </div>
@@ -307,21 +306,48 @@
                                     </div>
                                 </form>
                             </div>
-                            <div id="loginForm" class="form-section fade-section" style="display: block;">
+                            <div id="loginForm" class="form-section fade-section {{ !$startWithRegister ? 'active' : '' }}" style="{{ !$startWithRegister ? 'display: block;' : 'display: none;' }}">
                                 <form method="POST" action="/login" id="loginFormElement">
                                     <h3 class="mb-4 text-center text-success">Login</h3>
                                     @csrf
+                                    @if (session('error'))
+                                        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            {{ session('error') }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    @endif
+                                    @if (session('status'))
+                                        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            {{ session('status') }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    @endif
+                                    @if (session('success'))
+                                        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            {{ session('success') }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    @endif
                                     <div class="mb-3 form-group">
                                         <div class="input-wrapper">
                                             <span class="input-icon"><i class="fa fa-envelope"></i></span>
-                                            <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                            <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required>
                                         </div>
+                                        @if(!$startWithRegister && $errors->has('email'))
+                                            <div class="text-danger small mt-1" style="margin-left: 2.5rem;">{{ $errors->first('email') }}</div>
+                                        @endif
                                     </div>
                                     <div class="mb-3 form-group">
                                         <div class="input-wrapper">
                                             <span class="input-icon"><i class="fa fa-lock"></i></span>
                                             <input type="password" name="password" class="form-control" placeholder="Password" required>
                                         </div>
+                                        @if(!$startWithRegister && $errors->has('password'))
+                                            <div class="text-danger small mt-1" style="margin-left: 2.5rem;">{{ $errors->first('password') }}</div>
+                                        @endif
                                     </div>
                                     @if ($errors->has('login_error'))
                                         <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
@@ -376,8 +402,22 @@
             });
 
             // Set initial state
-            loginForm.classList.add('active');
-            loginBtn.classList.add('active');
+            const shouldStartWithRegister = {{ $startWithRegister ? 'true' : 'false' }};
+            if (shouldStartWithRegister) {
+                registerForm.classList.add('active');
+                registerBtn.classList.add('active');
+                loginForm.classList.remove('active');
+                loginBtn.classList.remove('active');
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            } else {
+                loginForm.classList.add('active');
+                loginBtn.classList.add('active');
+                registerForm.classList.remove('active');
+                registerBtn.classList.remove('active');
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            }
             // Animate toggle buttons on click
             [loginBtn, registerBtn].forEach(btn => {
                 btn.addEventListener('mousedown', function() {

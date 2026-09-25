@@ -40,6 +40,10 @@ Route::get('/contact', function () {
     return view('contacts');
 })->name('contacts');
 
+Route::get('/contacts', function () {
+    return redirect()->route('contacts');
+});
+
 // Public shopping cart route (redirects to login if not authenticated)
 Route::get('/shopping-cart', function () {
     if (!auth()->check()) {
@@ -186,6 +190,13 @@ Route::get('/login', function () {
     return view('auth.join');
 })->name('login');
 
+Route::get('/register', function () {
+    if (auth()->check()) {
+        return redirect()->route('home');
+    }
+    return view('auth.join', ['showRegister' => true]);
+});
+
 // ✅ Register (POST)
 Route::post('/register', [RegisterOtpController::class, 'register'])->name('register');
 
@@ -319,28 +330,13 @@ Route::middleware(['auth', 'admin', 'two_factor'])->prefix('admin')->name('admin
 |--------------------------------------------------------------------------
 */
 
+Route::get('/shop-detail/{id}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop_detail');
+
 Route::middleware('auth')->group(function () {
     // Legacy routes that redirect to appropriate phase
     Route::get('/index', function () {
-        $products = \App\Models\Product::with('images')->latest()->take(8)->get();
-        return view('index', compact('products'));
+        return redirect()->route('home');
     })->name('index');
-
-    Route::get('/about', function () {
-        return view('about');
-    })->name('about');
-
-    Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop');
-    
-    Route::get('/contacts', function () {
-        return view('contacts');
-    })->name('contacts');
-
-    Route::get('/blog', function () {
-        return view('blog');
-    })->name('blog');
-
-    Route::get('/shop-detail/{id}', [App\Http\Controllers\ShopController::class, 'show'])->name('shop_detail');
 
     // Secure cart routes using CartController (GET handled by public route)
     Route::post('/cart/add/{product}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
@@ -354,17 +350,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin', function() {
         return redirect()->route('admin.dashboard');
     })->name('admin');
-
-    // Secure currency change with validation
-    Route::post('/currency/change', function (\Illuminate\Http\Request $request) {
-        $request->validate([
-            'currency' => 'required|in:USD,EUR,GBP,JPY'
-        ]);
-        
-        $currency = $request->input('currency');
-        session(['currency' => $currency]);
-        return back()->with('success', 'Currency changed successfully!');
-    })->name('currency.change');
 
     // Order Routes
     Route::post('/order/store', [App\Http\Controllers\OrderController::class, 'store'])->name('order.store');

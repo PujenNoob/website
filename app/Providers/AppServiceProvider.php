@@ -22,7 +22,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Vercel terminates TLS at the proxy; force https URL generation.
-        if (! $this->app->environment('local')) {
+        if (! $this->app->environment('local') 
+            || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'
+            || isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
             URL::forceScheme('https');
         }
 

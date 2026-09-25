@@ -299,11 +299,7 @@
                     </div>
                     <p>Thank you for choosing us! Your order has been placed successfully and will be processed soon.</p>
                     <div class="footer__payment">
-                        <a href="#"><img src="{{ asset('img/malefashion-img/payment/payment-1.png') }}" alt=""></a>
-                        <a href="#"><img src="{{ asset('img/malefashion-img/payment/payment-2.png') }}" alt=""></a>
-                        <a href="#"><img src="{{ asset('img/malefashion-img/payment/payment-3.png') }}" alt=""></a>
-                        <a href="#"><img src="{{ asset('img/malefashion-img/payment/payment-4.png') }}" alt=""></a>
-                        <a href="#"><img src="{{ asset('img/malefashion-img/payment/payment-5.png') }}" alt=""></a>
+                        <a href="#"><img src="{{ asset('img/malefashion-img/payment.png') }}" alt="Payment methods"></a>
                     </div>
                 </div>
             </div>
