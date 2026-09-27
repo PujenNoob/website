@@ -36,31 +36,41 @@ class RegisterOtpController extends Controller
         ]);
 
         try {
-            // Create user directly in the database
-            $user = User::create([
+            // Store user temporarily in session (not DB yet)
+            $otp = rand(100000, 999999);
+
+            Session::put('otp_user', [
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
-                'role' => 'user',
-                'email_verified_at' => now(),
             ]);
 
-            // Attempt to send OTP/welcome email safely without blocking registration if mail server fails
+            Session::put('otp_code', $otp);
+            Session::put('otp_expires', now()->addMinutes(5));
+
+            // Log OTP for debugging
+            \Log::info('OTP Generated: ' . $otp . ' for email: ' . $request->email);
+
+            // Send OTP email
             try {
-                $otp = rand(100000, 999999);
-                Mail::to($user->email)->send(new SendOtpMail($otp));
+                Mail::to($request->email)->send(new SendOtpMail($otp));
             } catch (\Throwable $mailException) {
                 \Log::warning('Registration email could not be delivered: ' . $mailException->getMessage());
             }
 
-            // Automatically log the new user in
-            Auth::login($user);
+            // Always show OTP in development mode for testing
+            if (config('app.debug')) {
+                return redirect()->route('otp.verify.show')
+                    ->with('status', 'OTP sent to your email.')
+                    ->with('debug_otp', $otp)
+                    ->with('debug_message', 'Development Mode: OTP is ' . $otp);
+            }
 
-            return redirect()->route('home')->with('success', 'Welcome to Male Fashion! Your account has been created successfully.');
+            return redirect()->route('otp.verify.show')->with('status', 'OTP sent to your email.');
         } catch (\Exception $e) {
-            \Log::error('Registration Error: ' . $e->getMessage());
+            \Log::error('OTP Registration Error: ' . $e->getMessage());
             return back()->withInput($request->except('password', 'password_confirmation'))
-                ->withErrors(['email' => 'Registration failed. Please try again. ' . $e->getMessage()]);
+                ->withErrors(['email' => 'Failed to send OTP. Please try again. Error: ' . $e->getMessage()]);
         }
     }
 

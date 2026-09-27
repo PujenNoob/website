@@ -106,7 +106,7 @@ class AdminProfileController extends Controller
         }
 
         $user->update([
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
 
         return redirect()->route('admin.profile.security')

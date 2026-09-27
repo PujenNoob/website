@@ -129,8 +129,6 @@ class UserController extends Controller
             'role' => 'required|in:admin,user',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-
         User::create($validated);
 
         return redirect()->route('admin.users.index')
@@ -165,9 +163,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        if (!empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
+        if (empty($validated['password'])) {
             unset($validated['password']);
         }
 
