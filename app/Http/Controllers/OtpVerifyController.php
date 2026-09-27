@@ -65,7 +65,11 @@ class OtpVerifyController extends Controller
             return redirect()->route('home')->with('success', 'Welcome to Male Fashion! Your account has been created successfully.');
         } catch (\Exception $e) {
             \Log::error('OTP Verification Error: ' . $e->getMessage());
-            return back()->withErrors(['message' => 'Failed to complete account verification. Please try again.']);
+            return back()->withErrors([
+                'message' => config('app.debug')
+                    ? 'Verification failed: ' . $e->getMessage()
+                    : 'Failed to complete account verification. Please try again.',
+            ]);
         }
     }
 }
