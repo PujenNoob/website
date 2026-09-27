@@ -16,12 +16,17 @@ class ForgotPasswordController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        try {
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+            return $status === Password::RESET_LINK_SENT
+                ? back()->with(['status' => __($status)])
+                : back()->withErrors(['email' => __($status)]);
+        } catch (\Throwable $e) {
+            \Log::error('Password reset email error: ' . $e->getMessage());
+            return back()->withErrors(['email' => 'Unable to send password reset email at this moment. Please check mail settings or contact support.']);
+        }
     }
 }

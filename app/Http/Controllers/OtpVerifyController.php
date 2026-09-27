@@ -44,11 +44,17 @@ class OtpVerifyController extends Controller
         }
 
         try {
-            // Create user finally and login
+            // Find existing user or create user and login
             $userData = Session::get('otp_user');
-            $userData['email_verified_at'] = now(); // Mark email as verified since OTP was verified
-            $userData['role'] = 'user'; // Set default role for new users
-            $user = User::create($userData);
+            $user = User::where('email', $userData['email'])->first();
+            if (!$user) {
+                $userData['email_verified_at'] = now();
+                $userData['role'] = 'user';
+                $user = User::create($userData);
+            } else {
+                $user->email_verified_at = now();
+                $user->save();
+            }
 
             Auth::login($user);
 
@@ -59,7 +65,7 @@ class OtpVerifyController extends Controller
             return redirect()->route('home')->with('success', 'Welcome to Male Fashion! Your account has been created successfully.');
         } catch (\Exception $e) {
             \Log::error('OTP Verification Error: ' . $e->getMessage());
-            return back()->withErrors(['message' => 'Failed to create account. Please try again.']);
+            return back()->withErrors(['message' => 'Failed to complete account verification. Please try again.']);
         }
     }
 }

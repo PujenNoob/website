@@ -92,6 +92,23 @@
 
     @include('partials.ultimate-navbar')
 
+    @if(session('success'))
+        <div class="container mt-3" style="max-width: 1200px;">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; padding: 1rem 1.25rem;">
+                <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float: right; background: none; border: none; font-size: 1.2rem; cursor: pointer;"></button>
+            </div>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="container mt-3" style="max-width: 1200px;">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; padding: 1rem 1.25rem;">
+                <i class="fas fa-exclamation-triangle me-2"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float: right; background: none; border: none; font-size: 1.2rem; cursor: pointer;"></button>
+            </div>
+        </div>
+    @endif
+
     <!-- Ultimate Hero Section -->
     <section class="ultimate-hero">
         <div class="ultimate-hero__container">

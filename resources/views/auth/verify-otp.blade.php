@@ -158,15 +158,15 @@
                             <div class="d-grid mb-3">
                                 <button type="submit" class="btn btn-success">Verify OTP</button>
                             </div>
-                            <div class="text-center">
-                                <form method="POST" action="/resend-otp" style="display: inline;">
-                                    @csrf
-                                    <button type="submit" class="btn btn-outline-secondary btn-sm">
-                                        <i class="fa fa-refresh me-1"></i>Resend OTP
-                                    </button>
-                                </form>
-                            </div>
                         </form>
+                        <div class="text-center">
+                            <form method="POST" action="/resend-otp" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fa fa-refresh me-1"></i>Resend OTP
+                                </button>
+                            </form>
+                        </div>
                         @if ($errors->any())
                             <div class="text-danger mt-3">
                                 @foreach ($errors->all() as $error)

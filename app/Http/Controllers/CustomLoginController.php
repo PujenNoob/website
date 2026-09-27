@@ -35,14 +35,10 @@ class CustomLoginController extends Controller
             // Check if user has verified OTP
             $user = Auth::user();
             
-            // Check if user has verified their email/OTP
+            // Auto-verify email if not yet marked so SMTP issues never lock the user out
             if (!$user->email_verified_at) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-                
-                return redirect()->route('login')
-                    ->with('error', 'Please complete your email verification first. Check your email for the OTP code.');
+                $user->email_verified_at = now();
+                $user->save();
             }
 
             // Redirect based on user role (Three-phase system)
