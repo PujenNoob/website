@@ -78,10 +78,36 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
             'two_factor_recovery_codes' => 'array',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Mutator to hash passwords safely with fallback if Bcrypt driver fails.
+     */
+    public function setPasswordAttribute($value): void
+    {
+        if (empty($value)) {
+            return;
+        }
+
+        // Check if already hashed
+        if (preg_match('/^\$2[ayb]\$.{56}$/', $value) || str_starts_with((string) $value, '$argon2')) {
+            $this->attributes['password'] = $value;
+            return;
+        }
+
+        try {
+            $this->attributes['password'] = \Illuminate\Support\Facades\Hash::make($value);
+        } catch (\Throwable $e) {
+            \Log::warning('Standard Hash::make failed, falling back to native password_hash: ' . $e->getMessage());
+            try {
+                $this->attributes['password'] = password_hash($value, PASSWORD_DEFAULT);
+            } catch (\Throwable $e2) {
+                $this->attributes['password'] = password_hash($value, 1);
+            }
+        }
     }
 
     // Relationships

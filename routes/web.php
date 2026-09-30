@@ -209,6 +209,9 @@ Route::post('/verify-otp', [OtpVerifyController::class, 'verify'])->name('otp.ve
 // ✅ Resend OTP (POST)
 Route::post('/resend-otp', [RegisterOtpController::class, 'resendOtp'])->name('otp.resend');
 
+// ✅ Fetch active OTP for client / testing
+Route::get('/get-otp', [OtpVerifyController::class, 'getOtp'])->name('otp.get');
+
 // Email uniqueness check
 Route::post('/check-email', [RegisterOtpController::class, 'checkEmail'])->name('check.email');
 

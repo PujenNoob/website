@@ -141,32 +141,50 @@
                     <div class="text-center mb-4">
                         <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Logo" class="auth-logo">
                         <div class="auth-title h2">OTP Verification</div>
-                        <div class="text-muted mb-2">Please enter the 6-digit OTP sent to your email</div>
-                        @if(session('debug_otp'))
-                            <div class="alert alert-info text-center">
-                                <strong>Debug Mode:</strong> Your OTP is: <code>{{ session('debug_otp') }}</code>
+                        <div class="text-muted mb-2">Please enter the 6-digit OTP sent to <strong>{{ $email ?? 'your email' }}</strong></div>
+                        
+                        @if(session('status'))
+                            <div class="alert alert-success text-center py-2 mb-3">
+                                <i class="fa fa-check-circle me-1"></i> {{ session('status') }}
+                            </div>
+                        @endif
+
+                        @php
+                            $activeOtp = session('debug_otp') ?? ($otp ?? null);
+                        @endphp
+
+                        @if($activeOtp)
+                            <div class="alert alert-info text-center py-2 px-3 mb-3 shadow-sm" style="border-radius: 1rem; border: 1px solid #b8daff;">
+                                <strong>Active OTP:</strong> <code class="fs-5 px-2 py-1 bg-white rounded text-primary fw-bold" id="otpValue">{{ $activeOtp }}</code>
+                                <button type="button" class="btn btn-sm btn-outline-primary ms-2" onclick="autoFillOtp('{{ $activeOtp }}')" title="Auto-fill OTP into field">
+                                    <i class="fa fa-magic me-1"></i>Auto Fill
+                                </button>
                             </div>
                         @endif
                     </div>
                     <div class="auth-card">
-                        <form method="POST" action="/verify-otp">
+                        <form method="POST" action="/verify-otp" id="verifyOtpForm">
                             @csrf
                             <div class="form-group mb-4">
                                 <span class="input-icon"><i class="fa-solid fa-key"></i></span>
-                                <input type="text" name="otp" class="form-control" placeholder="Enter OTP" required>
+                                <input type="text" name="otp" id="otpInput" class="form-control" placeholder="Enter 6-digit OTP" maxlength="6" pattern="[0-9]{6}" required autofocus>
                             </div>
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-success">Verify OTP</button>
+                                <button type="submit" class="btn btn-success" id="verifyBtn">Verify OTP</button>
                             </div>
                         </form>
-                        <div class="text-center">
+                        <div class="text-center d-flex justify-content-center gap-2">
                             <form method="POST" action="/resend-otp" style="display: inline;">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-secondary btn-sm">
                                     <i class="fa fa-refresh me-1"></i>Resend OTP
                                 </button>
                             </form>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="fetchOtpBtn" onclick="fetchActiveOtp()">
+                                <i class="fa fa-key me-1"></i>Fetch OTP
+                            </button>
                         </div>
+                        <div id="fetchMessage" class="text-center mt-2" style="font-size: 0.85rem; display: none;"></div>
                         @if ($errors->any())
                             <div class="text-danger mt-3">
                                 @foreach ($errors->all() as $error)
@@ -180,5 +198,45 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function autoFillOtp(code) {
+            const input = document.getElementById('otpInput');
+            if (input) {
+                input.value = code;
+                input.focus();
+            }
+        }
+
+        function fetchActiveOtp() {
+            const btn = document.getElementById('fetchOtpBtn');
+            const msg = document.getElementById('fetchMessage');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin me-1"></i>Fetching...';
+            
+            fetch('/get-otp')
+                .then(res => res.json())
+                .then(data => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa fa-key me-1"></i>Fetch OTP';
+                    if (data.success && data.otp) {
+                        autoFillOtp(data.otp);
+                        msg.style.display = 'block';
+                        msg.className = 'text-success mt-2';
+                        msg.innerHTML = '<i class="fa fa-check-circle me-1"></i> OTP (' + data.otp + ') fetched and filled!';
+                    } else {
+                        msg.style.display = 'block';
+                        msg.className = 'text-danger mt-2';
+                        msg.innerHTML = '<i class="fa fa-exclamation-circle me-1"></i> ' + (data.message || 'No OTP available.');
+                    }
+                })
+                .catch(err => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa fa-key me-1"></i>Fetch OTP';
+                    msg.style.display = 'block';
+                    msg.className = 'text-danger mt-2';
+                    msg.innerHTML = '<i class="fa fa-exclamation-circle me-1"></i> Error fetching OTP.';
+                });
+        }
+    </script>
 </body>
 </html>

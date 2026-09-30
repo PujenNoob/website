@@ -15,7 +15,35 @@ class OtpVerifyController extends Controller
             return redirect()->route('login')->withErrors(['message' => 'Session expired. Please register again.']);
         }
 
-        return view('auth.verify-otp');
+        $userData = Session::get('otp_user');
+        $otp = Session::get('otp_code');
+        $expiresAt = Session::get('otp_expires');
+
+        return view('auth.verify-otp', [
+            'email' => $userData['email'] ?? null,
+            'otp' => $otp,
+            'expiresAt' => $expiresAt,
+        ]);
+    }
+
+    /**
+     * Return active OTP details for fetching in client/testing.
+     */
+    public function getOtp()
+    {
+        if (!Session::has('otp_user') || !Session::has('otp_code')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No active OTP session found. Please register again.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'otp' => (string) Session::get('otp_code'),
+            'email' => Session::get('otp_user')['email'] ?? null,
+            'expires_at' => Session::get('otp_expires'),
+        ]);
     }
 
     public function verify(Request $request)
@@ -40,6 +68,7 @@ class OtpVerifyController extends Controller
 
         // Verify OTP
         if ($request->otp != $storedOtp) {
+            Session::flash('debug_otp', $storedOtp);
             return back()->withErrors(['message' => 'Invalid OTP. Please try again.']);
         }
 
@@ -65,6 +94,7 @@ class OtpVerifyController extends Controller
             return redirect()->route('home')->with('success', 'Welcome to Male Fashion! Your account has been created successfully.');
         } catch (\Exception $e) {
             \Log::error('OTP Verification Error: ' . $e->getMessage());
+            Session::flash('debug_otp', $storedOtp);
             return back()->withErrors([
                 'message' => config('app.debug')
                     ? 'Verification failed: ' . $e->getMessage()
